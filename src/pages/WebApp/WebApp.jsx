@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import SpotifyGetPlaylists from "./components/SpotifyGetPlaylists/SpotifyGetPlaylists";
 import "./WebApp.css";
 
-const CLIENT_ID = ""; // insert your client id here from spotify
+const CLIENT_ID = "6742a45a680a410e8e0e0cda6297993c";
 const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
-const REDIRECT_URL_AFTER_LOGIN = "http://localhost:5173/webapp";
+const REDIRECT_URL_AFTER_LOGIN = "http://localhost:5173";
 const SPACE_DELIMITER = "%20";
 const SCOPES = [
   "user-read-currently-playing",
