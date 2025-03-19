@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
-import SpotifyGetPlaylists from "./components/SpotifyGetPlaylists/SpotifyGetPlaylists";
-import "./WebApp.css";
+import "./Home.css";
 
 const CLIENT_ID = "6742a45a680a410e8e0e0cda6297993c";
 const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
-const REDIRECT_URL_AFTER_LOGIN = "http://localhost:5173";
+const REDIRECT_URL_AFTER_LOGIN = "http://localhost:5173/playlists";
 const SPACE_DELIMITER = "%20";
 const SCOPES = [
   "user-read-currently-playing",
@@ -14,7 +13,7 @@ const SCOPES = [
 const SCOPES_URL_PARAM = SCOPES.join(SPACE_DELIMITER);
 
 /* 
-http://localhost:5173/webapp#access_token=ABCqxL4Y&token_type=Bearer&expires_in=3600
+http://localhost:5173/playlists#access_token=ABCqxL4Y&token_type=Bearer&expires_in=3600
 */
 const getReturnedParamsFromSpotifyAuth = (hash) => {
   const stringAfterHashtag = hash.substring(1);
@@ -29,7 +28,7 @@ const getReturnedParamsFromSpotifyAuth = (hash) => {
   return paramsSplitUp;
 };
 
-const WebApp = () => {
+const Home = () => {
   useEffect(() => {
     if (window.location.hash) {
       const { access_token, expires_in, token_type } =
@@ -51,9 +50,8 @@ const WebApp = () => {
     <div className="container">
       <h1>hi</h1>
       <button onClick={handleLogin}>login to spotify</button>
-      <SpotifyGetPlaylists />
     </div>
   );
 };
 
-export default WebApp;
+export default Home;

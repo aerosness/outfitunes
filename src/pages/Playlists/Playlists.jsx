@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./SpotifyGetPlaylists.css";
+import "./Playlists.css";
 
 const PLAYLISTS_ENDPOINT = "https://api.spotify.com/v1/me/playlists";
 
-const SpotifyGetPlaylists = () => {
+const Playlists = () => {
   const [token, setToken] = useState("");
   const [data, setData] = useState([]);
 
@@ -51,4 +51,4 @@ const SpotifyGetPlaylists = () => {
   );
 };
 
-export default SpotifyGetPlaylists;
+export default Playlists;
