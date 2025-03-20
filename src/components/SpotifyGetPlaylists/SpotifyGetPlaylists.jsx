@@ -1,3 +1,4 @@
+// src/components/SpotifyGetPlaylists/SpotifyGetPlaylists.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./SpotifyGetPlaylists.css";
@@ -16,6 +17,10 @@ const SpotifyGetPlaylists = () => {
   }, []);
 
   const handleGetPlaylists = () => {
+    if (!token) {
+      console.error("Нет токена! Сначала авторизуйтесь.");
+      return;
+    }
     axios
       .get(PLAYLISTS_ENDPOINT, {
         headers: {
@@ -33,17 +38,23 @@ const SpotifyGetPlaylists = () => {
   return (
     <div>
       <button className="fetch-button" onClick={handleGetPlaylists}>
-        Get Playlists
+        Получить плейлисты
       </button>
       <div className="playlists-container">
         {data.map((playlist) => (
           <div key={playlist.id} className="playlist-card">
             <img
-              src={playlist.images?.[0]?.url || "https://via.placeholder.com/150"}
+              src={
+                playlist.images?.[0]?.url || "https://via.placeholder.com/150"
+              }
               alt={playlist.name}
               className="playlist-image"
             />
-            <div className="playlist-name" title={playlist.name}>{playlist.name.length > 20 ? playlist.name.slice(0, 20) + '...' : playlist.name}</div>
+            <div className="playlist-name" title={playlist.name}>
+              {playlist.name.length > 20
+                ? playlist.name.slice(0, 20) + "..."
+                : playlist.name}
+            </div>
           </div>
         ))}
       </div>
