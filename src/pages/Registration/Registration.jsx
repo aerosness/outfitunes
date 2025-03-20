@@ -1,4 +1,3 @@
-// src/pages/Registration/Registration.jsx
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
@@ -17,7 +16,7 @@ const SCOPES_URL_PARAM = SCOPES.join(SPACE_DELIMITER);
 
 // Функция для парсинга хэша (access_token, token_type, expires_in)
 const getReturnedParamsFromSpotifyAuth = (hash) => {
-  const stringAfterHash = hash.substring(1); // убираем "#"
+  const stringAfterHash = hash.substring(1);
   const paramsInUrl = stringAfterHash.split("&"); 
   const paramsSplitUp = paramsInUrl.reduce((acc, currentValue) => {
     const [key, value] = currentValue.split("=");
@@ -51,7 +50,7 @@ const Registration = () => {
   }, [navigate]);
 
   const handleLogin = () => {
-    // Собираем URL для авторизации
+    //URL для авторизации
     window.location = `${SPOTIFY_AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL_AFTER_LOGIN}&scope=${SCOPES_URL_PARAM}&response_type=token&show_dialog=true`;
   };
 
