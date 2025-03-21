@@ -35,16 +35,12 @@ const Registration = () => {
     if (window.location.hash) {
       const { access_token, expires_in, token_type } =
         getReturnedParamsFromSpotifyAuth(window.location.hash);
-
-      // Очищаем localStorage, чтобы не копились старые данные
       localStorage.clear();
 
-      // Сохраняем новые данные
       localStorage.setItem("accessToken", access_token);
       localStorage.setItem("tokenType", token_type);
       localStorage.setItem("expiresIn", expires_in);
 
-      // После получения токена переходим на страницу плейлистов
       navigate(ROUTES.PLAYLISTS);
     }
   }, [navigate]);

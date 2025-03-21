@@ -1,10 +1,7 @@
-// src/pages/Outfit/Outfit.jsx
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import "./Outfit.css";
-
-// Импортируем JSON. Предположим, что файл лежит в src/constants/genres_dict.json
 import genresData from "../../constants/genres_dict.json";
 
 const PLAYLIST_TRACKS_ENDPOINT = (playlistId) =>
@@ -12,14 +9,13 @@ const PLAYLIST_TRACKS_ENDPOINT = (playlistId) =>
 const ARTISTS_ENDPOINT = (ids) =>
   `https://api.spotify.com/v1/artists?ids=${ids}`;
 
-// 1. Достаём массив основных жанров (genres) и объект с маппингом sub-жанров (genres_map)
 const { genres, genres_map } = genresData;
 
 /**
- * Функция unifyGenre
- * 1. Проверяет, есть ли в genres_map точное совпадение субжанра (из Spotify) с одним из массивов.
- * 2. Если не находит, применяет эвристику (ключевые слова) для определения ближайшего основного жанра.
- * 3. Если вообще ничего не подошло — возвращает null.
+ * unifyGenre
+ * 1 Проверяет, есть ли в genres_map точное совпадение субжанра (из Spotify) с одним из массивов
+ * 2 Если не находит, применяет ключевые слова для определения ближайшего основного жанра
+ * 3 если вообще ничего - null.
  */
 function unifyGenre(spotifyGenre) {
   if (!spotifyGenre) return null;
@@ -40,8 +36,7 @@ function unifyGenre(spotifyGenre) {
     }
   }
 
-  // 2. Если точного совпадения не нашлось — пробуем эвристику
-  // (Можно расширить, чтобы находить ключевые слова типа "metal", "rock" и т.п.)
+  // TODO: использовать genres_dict.json
   if (lowerGenre.includes("pop")) return "Pop";
   if (lowerGenre.includes("electronic") || lowerGenre.includes("edm") || lowerGenre.includes("house")) {
     return "Electronic";
@@ -63,11 +58,10 @@ function unifyGenre(spotifyGenre) {
   if (lowerGenre.includes("world")) return "World/Traditional";
   // ...
 
-  // 3. Если ничего не подошло — вернём null
   return null;
 }
 
-// Для выбора случайного файла из папки
+// рандом картинка
 function randomFile(basePath, folder, filesArray) {
   const randIndex = Math.floor(Math.random() * filesArray.length);
   return `${basePath}/${folder}/${filesArray[randIndex]}`;
@@ -81,7 +75,7 @@ const Outfit = () => {
   const { state } = useLocation();
   const playlistId = state?.playlistId;
 
-  // Наборы файлов для каждой части аутфита (пример)
+  // TODO: сделать чтобы картинок могло быть сколько угодно а не заддоное колво
   const outfitFiles = {
     top: ["1.png", "2.png", "3.png"],
     down: ["1.png", "2.png", "3.png"],
@@ -96,20 +90,20 @@ const Outfit = () => {
     }
   }, []);
 
-  // Загружаем данные плейлиста -> собираем артисты -> определяем жанр
+  // данные плейлиста -> собираем артисты -> определяем жанр
   useEffect(() => {
     if (!token || !playlistId) return;
 
     const fetchData = async () => {
       setLoading(true);
       try {
-        // 1. Получаем треки
+        //треки
         const resp = await axios.get(PLAYLIST_TRACKS_ENDPOINT(playlistId), {
           headers: { Authorization: `Bearer ${token}` },
         });
         const items = resp.data.items || [];
 
-        // 2. Собираем уникальные artistId
+        // берем artistId
         const artistIdsSet = new Set();
         items.forEach((item) => {
           const track = item.track;
@@ -125,7 +119,7 @@ const Outfit = () => {
           return;
         }
 
-        // 3. Разбиваем на пачки по 50 (лимит Spotify)
+        // разбиваем на пачки по 50 (лимит Spotify)
         const chunkSize = 50;
         let allArtists = [];
         for (let i = 0; i < artistIdsArray.length; i += chunkSize) {
@@ -136,7 +130,7 @@ const Outfit = () => {
           allArtists = allArtists.concat(artistsResp.data.artists || []);
         }
 
-        // 4. Подсчитываем самые частые основные жанры
+        //самые частые основные жанры
         const genreCount = {};
         allArtists.forEach((artist) => {
           const artistGenres = artist.genres || [];
@@ -148,7 +142,6 @@ const Outfit = () => {
           });
         });
 
-        // Находим жанр с maxCount
         let topGenre = null;
         let maxCount = 0;
         Object.keys(genreCount).forEach((g) => {
@@ -158,7 +151,7 @@ const Outfit = () => {
           }
         });
 
-        setMainGenre(topGenre); // Если жанр не нашёлся, будет null
+        setMainGenre(topGenre);
       } catch (error) {
         console.error("Ошибка при загрузке плейлиста/артистов:", error);
       } finally {
@@ -169,12 +162,10 @@ const Outfit = () => {
     fetchData();
   }, [token, playlistId]);
 
-  // Когда жанр определён, формируем аутфит
+  // формируем аутфит
   useEffect(() => {
     if (!mainGenre) return;
 
-    // Допустим, мы храним папки по названию основного жанра в lowerCase:
-    // /public/resources/outfit/pop, /public/resources/outfit/electronic и т.д.
     const basePath = `/resources/outfit/${mainGenre.toLowerCase()}`;
 
     const chosenOutfit = {
