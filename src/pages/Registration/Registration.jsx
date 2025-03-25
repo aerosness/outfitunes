@@ -44,16 +44,14 @@ const Registration = () => {
       navigate(ROUTES.PLAYLISTS);
     }
   }, [navigate]);
-
+  
   const handleLogin = () => {
     //URL для авторизации
     window.location = `${SPOTIFY_AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL_AFTER_LOGIN}&scope=${SCOPES_URL_PARAM}&response_type=token&show_dialog=true`;
   };
 
-  const before = "before:content-[''] before:absolute before:inset-0 before:w-full before:h-full before:bg-[linear-gradient(rgba(0,0,0,0)_50%,rgba(0,0,0,0.2)_50%)] before:bg-[size:100%_4px] before:opacity-50 before:pointer-events-none"
-
   return (
-    <div className={`image-container ${before}`}>
+    <div className={`image-container`}>
       <div className={`registration-container`}>
         <h1>Registration (Spotify Login)</h1>
         <button onClick={handleLogin}>Connect Spotify</button>
