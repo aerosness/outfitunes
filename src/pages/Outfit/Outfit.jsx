@@ -1,70 +1,45 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import "./Outfit.css";
 import genresData from "../../constants/genres_dict.json";
+import "./Outfit.css";
 
 const PLAYLIST_TRACKS_ENDPOINT = (playlistId) =>
   `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
 const ARTISTS_ENDPOINT = (ids) =>
   `https://api.spotify.com/v1/artists?ids=${ids}`;
 
-const { genres, genres_map } = genresData;
+const { genres_map } = genresData;
 
-/**
- * unifyGenre
- * 1 Проверяет, есть ли в genres_map точное совпадение субжанра (из Spotify) с одним из массивов
- * 2 Если не находит, применяет ключевые слова для определения ближайшего основного жанра
- * 3 если вообще ничего - null.
- */
 function unifyGenre(spotifyGenre) {
   if (!spotifyGenre) return null;
   const lowerGenre = spotifyGenre.toLowerCase();
 
-  // 1. Пытаемся найти точное совпадение в genres_map
   for (const mainGenre of Object.keys(genres_map)) {
-    // genres_map[mainGenre] — это массив субжанров (строк)
     const subgenres = genres_map[mainGenre];
     if (!Array.isArray(subgenres)) continue;
-
-    // Проверяем, есть ли точное совпадение
-    const foundExact = subgenres.some(
-      (sub) => sub.toLowerCase() === lowerGenre
-    );
-    if (foundExact) {
-      return mainGenre; // возвращаем, например, "Pop", "Electronic" и т.д.
+    if (subgenres.some((sub) => sub.toLowerCase() === lowerGenre)) {
+      return mainGenre;
     }
   }
-
-  // TODO: использовать genres_dict.json
-  if (lowerGenre.includes("pop")) return "Pop";
-  if (lowerGenre.includes("electronic") || lowerGenre.includes("edm") || lowerGenre.includes("house")) {
-    return "Electronic";
-  }
-  if (lowerGenre.includes("hip hop") || lowerGenre.includes("rap") || lowerGenre.includes("trap")) {
-    return "Hip Hop";
-  }
-  if (lowerGenre.includes("r&b")) return "R&B";
-  if (lowerGenre.includes("latin")) return "Latin";
-  if (lowerGenre.includes("rock")) return "Rock";
-  if (lowerGenre.includes("metal")) return "Metal";
-  if (lowerGenre.includes("country")) return "Country";
-  if (lowerGenre.includes("folk") || lowerGenre.includes("acoustic")) return "Folk/Acoustic";
-  if (lowerGenre.includes("classical")) return "Classical";
-  if (lowerGenre.includes("jazz")) return "Jazz";
-  if (lowerGenre.includes("blues")) return "Blues";
-  if (lowerGenre.includes("easy listening")) return "Easy listening";
-  if (lowerGenre.includes("new age")) return "New age";
-  if (lowerGenre.includes("world")) return "World/Traditional";
-  // ...
 
   return null;
 }
 
-// рандом картинка
-function randomFile(basePath, folder, filesArray) {
+async function fetchOutfitFiles(basePath, folder) {
+  try {
+    const response = await axios.get(`${basePath}/${folder}/`);
+    return response.data.files || [];
+  } catch (error) {
+    console.warn(`Error loading files for ${folder}:`, error);
+    return [];
+  }
+}
+
+function randomFile(filesArray) {
+  if (filesArray.length === 0) return null;
   const randIndex = Math.floor(Math.random() * filesArray.length);
-  return `${basePath}/${folder}/${filesArray[randIndex]}`;
+  return filesArray[randIndex];
 }
 
 const Outfit = () => {
@@ -75,14 +50,6 @@ const Outfit = () => {
   const { state } = useLocation();
   const playlistId = state?.playlistId;
 
-  // TODO: сделать чтобы картинок могло быть сколько угодно а не заддоное колво
-  const outfitFiles = {
-    top: ["1.png", "2.png", "3.png"],
-    down: ["1.png", "2.png", "3.png"],
-    shoes: ["1.png", "2.png", "3.png"],
-    accessories: ["1.png", "2.png", "3.png", "4.png", "5.png"],
-  };
-
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
@@ -90,20 +57,17 @@ const Outfit = () => {
     }
   }, []);
 
-  // данные плейлиста -> собираем артисты -> определяем жанр
   useEffect(() => {
     if (!token || !playlistId) return;
 
     const fetchData = async () => {
       setLoading(true);
       try {
-        //треки
         const resp = await axios.get(PLAYLIST_TRACKS_ENDPOINT(playlistId), {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}`, "Accept-Language": "en" },
         });
         const items = resp.data.items || [];
 
-        // берем artistId
         const artistIdsSet = new Set();
         items.forEach((item) => {
           const track = item.track;
@@ -114,23 +78,21 @@ const Outfit = () => {
         const artistIdsArray = Array.from(artistIdsSet);
 
         if (artistIdsArray.length === 0) {
-          console.warn("Нет артистов в плейлисте");
+          console.warn("No artists found in the playlist.");
           setLoading(false);
           return;
         }
 
-        // разбиваем на пачки по 50 (лимит Spotify)
         const chunkSize = 50;
         let allArtists = [];
         for (let i = 0; i < artistIdsArray.length; i += chunkSize) {
           const chunk = artistIdsArray.slice(i, i + chunkSize);
           const artistsResp = await axios.get(ARTISTS_ENDPOINT(chunk.join(",")), {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${token}`, "Accept-Language": "en" },
           });
           allArtists = allArtists.concat(artistsResp.data.artists || []);
         }
 
-        //самые частые основные жанры
         const genreCount = {};
         allArtists.forEach((artist) => {
           const artistGenres = artist.genres || [];
@@ -153,7 +115,7 @@ const Outfit = () => {
 
         setMainGenre(topGenre);
       } catch (error) {
-        console.error("Ошибка при загрузке плейлиста/артистов:", error);
+        console.error("Error fetching playlist/artists:", error);
       } finally {
         setLoading(false);
       }
@@ -162,61 +124,70 @@ const Outfit = () => {
     fetchData();
   }, [token, playlistId]);
 
-  // формируем аутфит
   useEffect(() => {
     if (!mainGenre) return;
 
     const basePath = `/resources/outfit/${mainGenre.toLowerCase()}`;
 
-    const chosenOutfit = {
-      top: randomFile(basePath, "top", outfitFiles.top),
-      down: randomFile(basePath, "down", outfitFiles.down),
-      shoes: randomFile(basePath, "shoes", outfitFiles.shoes),
-      accessories: [
-        randomFile(basePath, "accessories", outfitFiles.accessories),
-        randomFile(basePath, "accessories", outfitFiles.accessories),
-      ],
+    const loadOutfit = async () => {
+      const topFiles = await fetchOutfitFiles(basePath, "top");
+      const bottomFiles = await fetchOutfitFiles(basePath, "bottom");
+      const shoesFiles = await fetchOutfitFiles(basePath, "shoes");
+      const accessoriesFiles = await fetchOutfitFiles(basePath, "accessories");
+
+      setOutfit({
+        top: randomFile(topFiles),
+        bottom: randomFile(bottomFiles),
+        shoes: randomFile(shoesFiles),
+        accessories: [
+          randomFile(accessoriesFiles),
+          randomFile(accessoriesFiles),
+        ].filter(Boolean),
+      });
     };
 
-    setOutfit(chosenOutfit);
+    loadOutfit();
   }, [mainGenre]);
 
   return (
     <div className="outfit-page">
-      <h1>Ваш аутфит</h1>
+      <h1>Your Outfit</h1>
 
-      {!playlistId && <p>Плейлист не выбран.</p>}
-      {loading && <p>Загрузка данных…</p>}
+      {!playlistId && <p>No playlist selected.</p>}
+      {loading && <p>Loading data…</p>}
 
       {!loading && !mainGenre && (
         <p>
-          Не удалось определить жанр (возможно, слишком необычный вкус).
+          Could not determine a genre (maybe your taste is too unique or your playlist is too short).
           <br />
-          Попробуйте другой плейлист.
+          <a href="http://localhost:5173/playlists">Try another playlist.</a>
         </p>
       )}
 
       {mainGenre && outfit && (
         <div className="outfit-container">
-          <h2>Определённый жанр: {mainGenre}</h2>
+          <h2>Detected Genre: {mainGenre}</h2>
           <div className="outfit-item">
-            <span>Топ:</span>
-            <img src={outfit.top} alt="top" />
+            <span>Top:</span>
+            {outfit.top ? <img src={outfit.top} alt="top" /> : <p>No data</p>}
           </div>
           <div className="outfit-item">
-            <span>Низ:</span>
-            <img src={outfit.down} alt="down" />
+            <span>Bottom:</span>
+            {outfit.bottom ? <img src={outfit.bottom} alt="bottom" /> : <p>No data</p>}
           </div>
           <div className="outfit-item">
-            <span>Обувь:</span>
-            <img src={outfit.shoes} alt="shoes" />
+            <span>Shoes:</span>
+            {outfit.shoes ? <img src={outfit.shoes} alt="shoes" /> : <p>No data</p>}
           </div>
           <div className="outfit-item">
-            <span>Аксессуары:</span>
-            {outfit.accessories.map((acc, idx) => (
-              <img key={idx} src={acc} alt={`accessory-${idx}`} />
-            ))}
+            <span>Accessories:</span>
+            {outfit.accessories.length > 0 ? (
+              outfit.accessories.map((acc, idx) => <img key={idx} src={acc} alt={`accessory-${idx}`} />)
+            ) : (
+              <p>No accessories</p>
+            )}
           </div>
+          <a href="http://localhost:5173/playlists">back</a>
         </div>
       )}
     </div>

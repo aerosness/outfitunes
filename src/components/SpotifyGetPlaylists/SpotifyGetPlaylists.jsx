@@ -15,40 +15,41 @@ const SpotifyGetPlaylists = () => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       setToken(accessToken);
+      fetchPlaylists(accessToken);
     }
   }, []);
 
-  const handleGetPlaylists = () => {
-    if (!token) {
-      console.error("Нет токена! Сначала авторизуйтесь.");
+  const fetchPlaylists = (accessToken = token) => {
+    if (!accessToken) {
+      console.error("No token! Please log in first.");
       return;
     }
     axios
       .get(PLAYLISTS_ENDPOINT, {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + accessToken,
+          "Accept-Language": "en",
         },
       })
       .then((response) => {
         setData(response.data.items || []);
       })
-      .catch((error) => {
+      .catch((error) => { 
         console.error(error);
       });
   };
 
   const handlePlaylistClick = (playlistId) => {
     navigate(ROUTES.OUTFIT, {
-      state: {
-        playlistId: playlistId,
-      },
+      state: { playlistId },
     });
   };
 
   return (
     <div>
-      <button className="fetch-button" onClick={handleGetPlaylists}>
-        Получить плейлисты
+      <h1>Your Playlists</h1>
+      <button className="fetch-button" onClick={() => fetchPlaylists()}>
+        Reload Playlists
       </button>
       <div className="playlists-container">
         {data.map((playlist) => (
@@ -58,16 +59,12 @@ const SpotifyGetPlaylists = () => {
             onClick={() => handlePlaylistClick(playlist.id)}
           >
             <img
-              src={
-                playlist.images?.[0]?.url || "https://via.placeholder.com/150"
-              }
+              src={playlist.images?.[0]?.url || "https://via.placeholder.com/150"}
               alt={playlist.name}
               className="playlist-image"
             />
             <div className="playlist-name" title={playlist.name}>
-              {playlist.name.length > 20
-                ? playlist.name.slice(0, 20) + "..."
-                : playlist.name}
+              {playlist.name.length > 20 ? playlist.name.slice(0, 20) + "..." : playlist.name}
             </div>
           </div>
         ))}
