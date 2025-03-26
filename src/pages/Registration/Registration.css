@@ -1,0 +1,79 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    font-family: 'Montserrat', sans-serif;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .image-container {
+    position: relative;
+    margin: 30px;
+    width: 80vw;
+    height: 70vh;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Ensures pseudo-element respects rounded corners */
+  }
+  
+  /* Pseudo-element for background image with grayscale filter */
+  .image-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("/resources/gifs/outfitunes_sky.gif") center/cover no-repeat;
+    filter: grayscale(100%);
+    transition: filter 0.5s ease;
+    z-index: -1; /* Places the background behind the content */
+  }
+  
+  /* Remove grayscale filter on hover */
+  .image-container:hover::before {
+    filter: grayscale(0%);
+  }
+  
+  .registration-container {
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 2s ease-in-out;
+    position: relative; /* Keeps content above the pseudo-element */
+  }
+  
+  .registration-container h1 {
+    margin-bottom: 1.5rem;
+    font-family: 'Jersey 15', sans-serif;
+    font-size: 2rem;
+  }
+  
+  .registration-container button {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 2px solid #fff;
+    padding: 10px 20px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .registration-container button:hover {
+    background-color: #fff;
+    color: #000;
+  }
+  
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  

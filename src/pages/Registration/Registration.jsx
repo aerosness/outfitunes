@@ -35,29 +35,27 @@ const Registration = () => {
     if (window.location.hash) {
       const { access_token, expires_in, token_type } =
         getReturnedParamsFromSpotifyAuth(window.location.hash);
-
-      // Очищаем localStorage, чтобы не копились старые данные
       localStorage.clear();
 
-      // Сохраняем новые данные
       localStorage.setItem("accessToken", access_token);
       localStorage.setItem("tokenType", token_type);
       localStorage.setItem("expiresIn", expires_in);
 
-      // После получения токена переходим на страницу плейлистов
       navigate(ROUTES.PLAYLISTS);
     }
   }, [navigate]);
-
+  
   const handleLogin = () => {
     //URL для авторизации
     window.location = `${SPOTIFY_AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL_AFTER_LOGIN}&scope=${SCOPES_URL_PARAM}&response_type=token&show_dialog=true`;
   };
 
   return (
-    <div className="registration-container">
-      <h1>Регистрация (Spotify Login)</h1>
-      <button onClick={handleLogin}>Войти через Spotify</button>
+    <div className={`image-container`}>
+      <div className={`registration-container`}>
+        <h1>Registration (Spotify Login)</h1>
+        <button onClick={handleLogin}>Connect Spotify</button>
+      </div>
     </div>
   );
 };
