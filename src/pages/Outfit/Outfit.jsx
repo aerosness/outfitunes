@@ -11,6 +11,9 @@ const ARTISTS_ENDPOINT = (ids) =>
 
 const { genres_map } = genresData;
 
+// Maximum number of images to check for each category
+const MAX_IMAGES_TO_CHECK = 10;
+
 function unifyGenre(spotifyGenre) {
   if (!spotifyGenre) return null;
   const lowerGenre = spotifyGenre.toLowerCase();
@@ -26,20 +29,54 @@ function unifyGenre(spotifyGenre) {
   return null;
 }
 
-async function fetchOutfitFiles(basePath, folder) {
-  try {
-    const response = await axios.get(`${basePath}/${folder}/`);
-    return response.data.files || [];
-  } catch (error) {
-    console.warn(`Error loading files for ${folder}:`, error);
-    return [];
+// Check if an image exists
+const checkImageExists = (url) => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src = url;
+  });
+};
+
+// Find all available images in a category
+async function findAvailableImages(genre, category) {
+  const availableImages = [];
+  
+  for (let i = 1; i <= MAX_IMAGES_TO_CHECK; i++) {
+    const imgPath = `/outfit/${genre}/${category}/${i}.png`;
+    const exists = await checkImageExists(imgPath);
+    
+    if (exists) {
+      availableImages.push(`${i}.png`);
+    }
   }
+  
+  return availableImages;
 }
 
-function randomFile(filesArray) {
-  if (filesArray.length === 0) return null;
-  const randIndex = Math.floor(Math.random() * filesArray.length);
-  return filesArray[randIndex];
+// Get two different random items if possible
+function getTwoRandomItems(array) {
+  if (array.length === 0) return [];
+  if (array.length === 1) return [array[0]];
+  
+  // Get first random item
+  const index1 = Math.floor(Math.random() * array.length);
+  const item1 = array[index1];
+  
+  // Remove the first item and get second random item
+  const remainingItems = array.filter((_, idx) => idx !== index1);
+  const index2 = Math.floor(Math.random() * remainingItems.length);
+  const item2 = remainingItems[index2];
+  
+  return [item1, item2];
+}
+
+// Get one random item from array
+function getRandomItem(array) {
+  if (array.length === 0) return null;
+  const randIndex = Math.floor(Math.random() * array.length);
+  return array[randIndex];
 }
 
 const Outfit = () => {
@@ -53,6 +90,7 @@ const Outfit = () => {
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
+      console.log("Access token found:", accessToken);
       setToken(accessToken);
     }
   }, []);
@@ -63,9 +101,11 @@ const Outfit = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        console.log("Fetching playlist tracks...");
         const resp = await axios.get(PLAYLIST_TRACKS_ENDPOINT(playlistId), {
           headers: { Authorization: `Bearer ${token}`, "Accept-Language": "en" },
         });
+        console.log("Playlist tracks fetched:", resp.data);
         const items = resp.data.items || [];
 
         const artistIdsSet = new Set();
@@ -83,6 +123,7 @@ const Outfit = () => {
           return;
         }
 
+        console.log("Fetching artist genres...");
         const chunkSize = 50;
         let allArtists = [];
         for (let i = 0; i < artistIdsArray.length; i += chunkSize) {
@@ -92,6 +133,7 @@ const Outfit = () => {
           });
           allArtists = allArtists.concat(artistsResp.data.artists || []);
         }
+        console.log("Artists fetched:", allArtists);
 
         const genreCount = {};
         allArtists.forEach((artist) => {
@@ -103,6 +145,7 @@ const Outfit = () => {
             }
           });
         });
+        console.log("Genre count:", genreCount);
 
         let topGenre = null;
         let maxCount = 0;
@@ -112,6 +155,7 @@ const Outfit = () => {
             maxCount = genreCount[g];
           }
         });
+        console.log("Top genre detected:", topGenre);
 
         setMainGenre(topGenre);
       } catch (error) {
@@ -126,29 +170,40 @@ const Outfit = () => {
 
   useEffect(() => {
     if (!mainGenre) return;
-
-    const basePath = `/resources/outfit/${mainGenre.toLowerCase()}`;
-
+    
+    const formattedGenre = mainGenre.toLowerCase().replace(/\s+/g, '');
+    console.log(`Formatted genre path: ${formattedGenre}`);
+    
     const loadOutfit = async () => {
-      const topFiles = await fetchOutfitFiles(basePath, "top");
-      const bottomFiles = await fetchOutfitFiles(basePath, "bottom");
-      const shoesFiles = await fetchOutfitFiles(basePath, "shoes");
-      const accessoriesFiles = await fetchOutfitFiles(basePath, "accessories");
-
-      setOutfit({
-        top: randomFile(topFiles),
-        bottom: randomFile(bottomFiles),
-        shoes: randomFile(shoesFiles),
-        accessories: [
-          randomFile(accessoriesFiles),
-          randomFile(accessoriesFiles),
-        ].filter(Boolean),
-      });
+      try {
+        // Find all available images for each category
+        const topFiles = await findAvailableImages(formattedGenre, "top");
+        const bottomFiles = await findAvailableImages(formattedGenre, "bottom");
+        const shoesFiles = await findAvailableImages(formattedGenre, "shoes");
+        const accessoriesFiles = await findAvailableImages(formattedGenre, "accessories");
+        
+        console.log("Available files:", { topFiles, bottomFiles, shoesFiles, accessoriesFiles });
+        
+        // Select random items for each category
+        const randomTop = getRandomItem(topFiles);
+        const randomBottom = getRandomItem(bottomFiles);
+        const randomShoes = getRandomItem(shoesFiles);
+        const randomAccessories = getTwoRandomItems(accessoriesFiles);
+        
+        setOutfit({
+          top: randomTop ? `/outfit/${formattedGenre}/top/${randomTop}` : null,
+          bottom: randomBottom ? `/outfit/${formattedGenre}/bottom/${randomBottom}` : null,
+          shoes: randomShoes ? `/outfit/${formattedGenre}/shoes/${randomShoes}` : null,
+          accessories: randomAccessories.map(file => `/outfit/${formattedGenre}/accessories/${file}`),
+        });
+      } catch (error) {
+        console.error("Error loading outfit:", error);
+      }
     };
-
+    
     loadOutfit();
   }, [mainGenre]);
-
+  
   return (
     <div className="outfit-page">
       <h1>Your Outfit</h1>
@@ -187,6 +242,8 @@ const Outfit = () => {
               <p>No accessories</p>
             )}
           </div>
+
+          <button onClick={() => window.location.reload()}>reload</button>
           <a href="http://localhost:5173/playlists">back</a>
         </div>
       )}
