@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import axios from "axios";
 import genresData from "../../constants/genres_dict.json";
 import "./Outfit.css";
@@ -214,7 +214,7 @@ const Outfit = () => {
         <p className="color: black">
           Could not determine a genre (maybe your taste is too unique or your playlist is too short).
           <br />
-          <a href="http://localhost:5173/playlists">Try another playlist.</a>
+          <Link to="/playlists">Try another playlist.</Link>
         </p>
       )}
 
@@ -237,7 +237,7 @@ const Outfit = () => {
           <div className="footer-text">outfitunes.vercel.app</div>
           <div>
             <button onClick={() => window.location.reload()}>reload</button>
-            <a href="http://localhost:5173/playlists">back</a>
+            <Link to="/playlists">back</Link>
           </div>
         </div>
       )}
