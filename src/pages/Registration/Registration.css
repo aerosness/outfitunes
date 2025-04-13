@@ -1,79 +1,113 @@
-body {
-    margin: 0;
-    padding: 0;
-    background-color: #000;
-    font-family: 'Montserrat', sans-serif;
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.registration-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("/resources/gifs/gif2.gif");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.registration-container {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border-radius: 24px;
+  padding: 60px 80px;
+  text-align: center;
+  max-width: 700px;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.registration-container h1 {
+  font-size: 56px;
+  color: white;
+  margin-bottom: 20px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.registration-container p {
+  color: white;
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+.spotify-button {
+  background-color: #212121;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 16px 24px;
+  border: none;
+  border-radius: 99px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+  transition: background-color 0.3s ease;
+}
+
+.spotify-button:hover {
+  background-color:  	#121212;
+}
+
+.spotify-button img {
+  width: 24px;
+  height: 24px;
+}
+
+.note {
+  margin-top: 20px;
+  font-size: 14px;
+  color: white;
+  opacity: 0.9;
+}
+
+/* Украшения */
+.deco {
+  position: absolute;
+  z-index: 1;
+}
+
+.vest { top: 40px; left: 60px; width: 60px; transform: rotate(12deg); }
+.camera { top: 70px; right: 100px; width: 80px; transform: rotate(-6deg); }
+.record { right: 160px; bottom: 180px; width: 70px; transform: rotate(45deg); }
+.plush { top: 35%; left: 140px; width: 60px; transform: rotate(3deg); }
+.doll { bottom: 140px; left: 80px; width: 50px; transform: rotate(-12deg); }
+.stereo { bottom: 110px; right: 120px; width: 70px; transform: rotate(6deg); }
+
+/* Скрытие/перемещение украшений на телефонах */
+@media (max-width: 768px) {
+  .deco {
+    display: none;
   }
-  
-  .image-container {
-    position: relative;
-    margin: 30px;
-    width: 80vw;
-    height: 70vh;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden; /* Ensures pseudo-element respects rounded corners */
-  }
-  
-  /* Pseudo-element for background image with grayscale filter */
-  .image-container::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url("/resources/gifs/outfitunes_sky.gif") center/cover no-repeat;
-    filter: grayscale(100%);
-    transition: filter 0.5s ease;
-    z-index: -1; /* Places the background behind the content */
-  }
-  
-  /* Remove grayscale filter on hover */
-  .image-container:hover::before {
-    filter: grayscale(0%);
-  }
-  
+
   .registration-container {
-    text-align: center;
-    color: #fff;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    animation: fadeIn 2s ease-in-out;
-    position: relative; /* Keeps content above the pseudo-element */
+    padding: 40px 24px;
   }
-  
+
   .registration-container h1 {
-    margin-bottom: 1.5rem;
-    font-family: 'Jersey 15', sans-serif;
-    font-size: 2rem;
+    font-size: 36px;
   }
-  
-  .registration-container button {
-    background-color: rgba(255, 255, 255, 0.2);
-    border: 2px solid #fff;
-    padding: 10px 20px;
-    color: #fff;
-    cursor: pointer;
-    font-size: 1rem;
-    border-radius: 4px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+
+  .registration-container p {
+    font-size: 16px;
   }
-  
-  .registration-container button:hover {
-    background-color: #fff;
-    color: #000;
+
+  .spotify-button {
+    font-size: 16px;
+    padding: 14px 20px;
   }
-  
-  @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-  }
-  
+}

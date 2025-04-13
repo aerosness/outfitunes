@@ -14,16 +14,14 @@ const SCOPES = [
 ];
 const SCOPES_URL_PARAM = SCOPES.join(SPACE_DELIMITER);
 
-// Функция для парсинга хэша (access_token, token_type, expires_in)
 const getReturnedParamsFromSpotifyAuth = (hash) => {
   const stringAfterHash = hash.substring(1);
-  const paramsInUrl = stringAfterHash.split("&"); 
+  const paramsInUrl = stringAfterHash.split("&");
   const paramsSplitUp = paramsInUrl.reduce((acc, currentValue) => {
     const [key, value] = currentValue.split("=");
     acc[key] = value;
     return acc;
   }, {});
-
   return paramsSplitUp;
 };
 
@@ -31,30 +29,42 @@ const Registration = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Проверяем, есть ли хэш с токеном после редиректа от Spotify
     if (window.location.hash) {
       const { access_token, expires_in, token_type } =
         getReturnedParamsFromSpotifyAuth(window.location.hash);
       localStorage.clear();
-
       localStorage.setItem("accessToken", access_token);
       localStorage.setItem("tokenType", token_type);
       localStorage.setItem("expiresIn", expires_in);
-
       navigate(ROUTES.PLAYLISTS);
     }
   }, [navigate]);
-  
+
   const handleLogin = () => {
-    //URL для авторизации
     window.location = `${SPOTIFY_AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL_AFTER_LOGIN}&scope=${SCOPES_URL_PARAM}&response_type=token&show_dialog=true`;
   };
 
   return (
-    <div className={`image-container`}>
-      <div className={`registration-container`}>
-        <h1>Registration (Spotify Login)</h1>
-        <button onClick={handleLogin}>Connect Spotify</button>
+    <div className="registration-wrapper">
+      {/* Украшения */}
+      <img src="/resources/img/vest.png" className="deco vest" alt="vest" />
+      <img src="/resources/img/camera.png" className="deco camera" alt="camera" />
+      <img src="/resources/img/record.png" className="deco record" alt="record" />
+      <img src="/resources/img/plush.png" className="deco plush" alt="plush" />
+      <img src="/resources/img/doll.png" className="deco doll" alt="doll" />
+      <img src="/resources/img/stereo.png" className="deco stereo" alt="stereo" />
+
+      {/* Контент */}
+      <div className="registration-container">
+        <h1>YOUR <br /> SPOTIFY <br /> OUTFIT</h1>
+        <p>Find out what your Spotify outfit looks like based on your music taste.</p>
+
+        <button className="spotify-button" onClick={handleLogin}>
+          <img src="/resources/img/spotifylogo.png" alt="Spotify" />
+          Connect Spotify
+        </button>
+
+        <p className="note">ℹ️ Make sure you're not in incognito</p>
       </div>
     </div>
   );
