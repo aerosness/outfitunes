@@ -206,13 +206,12 @@ const Outfit = () => {
   
   return (
     <div className="outfit-page">
-      <h1>Your Outfit</h1>
 
       {!playlistId && <p>No playlist selected.</p>}
       {loading && <p>Loading data…</p>}
 
       {!loading && !mainGenre && (
-        <p>
+        <p className="color: black">
           Could not determine a genre (maybe your taste is too unique or your playlist is too short).
           <br />
           <a href="http://localhost:5173/playlists">Try another playlist.</a>
@@ -220,33 +219,30 @@ const Outfit = () => {
       )}
 
       {mainGenre && outfit && (
-        <div className="outfit-container">
-          <h2>Detected Genre: {mainGenre}</h2>
-          <div className="outfit-item">
-            <span>Top:</span>
-            {outfit.top ? <img src={outfit.top} alt="top" /> : <p>No data</p>}
-          </div>
-          <div className="outfit-item">
-            <span>Bottom:</span>
-            {outfit.bottom ? <img src={outfit.bottom} alt="bottom" /> : <p>No data</p>}
-          </div>
-          <div className="outfit-item">
-            <span>Shoes:</span>
-            {outfit.shoes ? <img src={outfit.shoes} alt="shoes" /> : <p>No data</p>}
-          </div>
-          <div className="outfit-item">
-            <span>Accessories:</span>
-            {outfit.accessories.length > 0 ? (
-              outfit.accessories.map((acc, idx) => <img key={idx} src={acc} alt={`accessory-${idx}`} />)
-            ) : (
-              <p>No accessories</p>
-            )}
-          </div>
+        <div className="phone-frame">
+          <div className="genre-title">{mainGenre}</div>
+          <p className="username-subtitle">username's spotify outfit</p>
 
-          <button onClick={() => window.location.reload()}>reload</button>
-          <a href="http://localhost:5173/playlists">back</a>
+          <div className="outfit-layout">
+            <div className="column">
+              {outfit.top && <img src={outfit.top} alt="top" />}
+              {outfit.bottom && <img src={outfit.bottom} alt="bottom" />}
+              {outfit.shoes && <img src={outfit.shoes} alt="shoes" />}
+            </div>
+            <div className="column">
+              {outfit.accessories[0] && <img src={outfit.accessories[0]} alt="acc1" />}
+              {outfit.accessories[1] && <img src={outfit.accessories[1]} alt="acc2" />}
+            </div>
+          </div>
+          <div className="footer-text">outfitunes.vercel.app</div>
+          <div>
+            <button onClick={() => window.location.reload()}>reload</button>
+            <a href="http://localhost:5173/playlists">back</a>
+          </div>
         </div>
       )}
+
+      
     </div>
   );
 };
