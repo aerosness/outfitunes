@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import axios from "axios";
+import html2canvas from "html2canvas";
 import genresData from "../../constants/genres_dict.json";
 import "./Outfit.css";
 
@@ -12,7 +13,7 @@ const ARTISTS_ENDPOINT = (ids) =>
 const { genres_map } = genresData;
 
 // Maximum number of images to check for each category
-const MAX_IMAGES_TO_CHECK = 10;
+const MAX_IMAGES_TO_CHECK = 5;
 
 function unifyGenre(spotifyGenre) {
   if (!spotifyGenre) return null;
@@ -79,12 +80,28 @@ function getRandomItem(array) {
   return array[randIndex];
 }
 
+const downloadOutfit = async () => {
+  const frame = document.querySelector(".phone-frame");
+  if (!frame) return;
+
+  const canvas = await html2canvas(frame, {
+    useCORS: true,
+    backgroundColor: null,
+  });
+
+  const link = document.createElement("a");
+  link.download = "spotify-outfit.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+};
+
 const Outfit = () => {
   const [token, setToken] = useState("");
   const [mainGenre, setMainGenre] = useState(null);
   const [outfit, setOutfit] = useState(null);
   const [loading, setLoading] = useState(false);
   const { state } = useLocation();
+  const [username, setUsername] = useState("");
   const playlistId = state?.playlistId;
 
   useEffect(() => {
@@ -204,24 +221,54 @@ const Outfit = () => {
     loadOutfit();
   }, [mainGenre]);
   
+
+  // username
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      console.log("Access token found:", accessToken);
+      setToken(accessToken);
+  
+      axios
+        .get("https://api.spotify.com/v1/me", {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+        .then((res) => {
+          setUsername(res.data.display_name || "User");
+          console.log("Fetched username:", res.data.display_name);
+        })
+        .catch((err) => console.error("Error fetching username:", err));
+    }
+  }, []);
+  
   return (
     <div className="outfit-page">
 
       {!playlistId && <p>No playlist selected.</p>}
-      {loading && <p>Loading data…</p>}
 
       {!loading && !mainGenre && (
-        <p className="color: black">
+        <p className="color: white">
           Could not determine a genre (maybe your taste is too unique or your playlist is too short).
           <br />
           <Link to="/playlists">Try another playlist.</Link>
         </p>
       )}
+      {loading && (
+        <div className="loader-wrapper">
+          <div className="loader"></div>
+        </div>
+      )}
+
+      {!loading && mainGenre && !outfit && (
+        <div className="loader-wrapper">
+          <div className="loader"></div>
+        </div>
+      )}
 
       {mainGenre && outfit && (
         <div className="phone-frame">
           <div className="genre-title">{mainGenre}</div>
-          <p className="username-subtitle">username's spotify outfit</p>
+          <p className="username-subtitle">{username}'s spotify outfit</p>
 
           <div className="outfit-layout">
             <div className="column">
@@ -238,6 +285,7 @@ const Outfit = () => {
           <div>
             <button onClick={() => window.location.reload()}>reload</button>
             <Link to="/playlists">back</Link>
+            <button onClick={downloadOutfit}>save as image</button>
           </div>
         </div>
       )}

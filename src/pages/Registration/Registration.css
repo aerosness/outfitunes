@@ -82,17 +82,23 @@
 }
 
 .vest { top: 40px; left: 60px; width: 60px; transform: rotate(12deg); }
-.camera { top: 70px; right: 100px; width: 80px; transform: rotate(-6deg); }
-.record { right: 160px; bottom: 180px; width: 70px; transform: rotate(45deg); }
-.plush { top: 35%; left: 140px; width: 60px; transform: rotate(3deg); }
-.doll { bottom: 140px; left: 80px; width: 50px; transform: rotate(-12deg); }
-.stereo { bottom: 110px; right: 120px; width: 70px; transform: rotate(6deg); }
+.acics { top: 70px; right: 100px; width: 80px; transform: rotate(-6deg); scale: 1.4;}
+.jeans { right: 160px; bottom: 380px; width: 70px; transform: rotate(5deg); scale: 1.2;}
+.hoodie { top: 35%; left: 140px; width: 60px; transform: rotate(3deg); scale: 1.4;}
+.shirt { bottom: 140px; left: 80px; width: 50px; transform: rotate(-12deg); scale: 1.9;}
+.brace { bottom: 110px; right: 120px; width: 70px; transform: rotate(6deg); }
 
 /* Скрытие/перемещение украшений на телефонах */
 @media (max-width: 768px) {
-  .deco {
+  .hoodie{
     display: none;
   }
+
+  .vest { top: 40px; left: 60px; width: 60px; transform: rotate(12deg); }
+  .acics { top: 70px; right: 100px; width: 80px; transform: rotate(-6deg); }
+  .jeans { right: 160px; bottom: 60px; width: 70px; transform: rotate(5deg); scale: 1.2;}
+  .shirt { bottom: 120px; left: 80px; width: 50px; transform: rotate(-12deg); }
+  .brace { bottom: 90px; right: 40px; width: 70px; transform: rotate(6deg); }
 
   .registration-container {
     padding: 40px 24px;

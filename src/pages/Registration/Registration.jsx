@@ -47,12 +47,12 @@ const Registration = () => {
   return (
     <div className="registration-wrapper">
       {/* Украшения */}
-      <img src="/resources/img/vest.png" className="deco vest" alt="vest" />
-      <img src="/resources/img/camera.png" className="deco camera" alt="camera" />
-      <img src="/resources/img/record.png" className="deco record" alt="record" />
-      <img src="/resources/img/plush.png" className="deco plush" alt="plush" />
-      <img src="/resources/img/doll.png" className="deco doll" alt="doll" />
-      <img src="/resources/img/stereo.png" className="deco stereo" alt="stereo" />
+      <img src="/resources/img/register/vest.png" className="deco vest" alt="vest" />
+      <img src="/resources/img/register/acics.png" className="deco acics" alt="acics" />
+      <img src="/resources/img/register/jeans.png" className="deco jeans" alt="jeans" />
+      <img src="/resources/img/register/hoodie.png" className="deco hoodie" alt="hoodie" />
+      <img src="/resources/img/register/shirt.png" className="deco shirt" alt="shirt" />
+      <img src="/resources/img/register/brace.png" className="deco brace" alt="brace" />
 
       {/* Контент */}
       <div className="registration-container">

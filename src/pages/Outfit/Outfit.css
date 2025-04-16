@@ -25,7 +25,7 @@
   }
   
   .genre-title {
-    font-family: 'Orbitron', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     color: white;
     font-size: 34px;
     font-weight: 900;
@@ -59,7 +59,7 @@
   }
   
   .username-subtitle {
-    font-family: 'Orbitron', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 14px;
     color: #ccc;
     margin-top: -10px;
@@ -75,3 +75,48 @@
     margin-top: auto; 
     padding-bottom: 10px;
   }
+
+  button,
+  a {
+    font-family: 'Montserrat', sans-serif;
+    background-color: white;
+    color: black;
+    font-size: 13px;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 10px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.3s ease;
+}
+
+button:hover,
+a:hover {
+  background-color: #e6e6e6;
+}
+
+.loader-wrapper {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
+.loader {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #1db954;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-top: 2rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
