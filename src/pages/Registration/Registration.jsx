@@ -9,8 +9,6 @@ const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
 const REDIRECT_URL_AFTER_LOGIN = window.location.origin;
 const SPACE_DELIMITER = "%20";
 const SCOPES = [
-  "user-read-currently-playing",
-  "user-read-playback-state",
   "playlist-read-private",
 ];
 const SCOPES_URL_PARAM = SCOPES.join(SPACE_DELIMITER);
