@@ -1,0 +1,106 @@
+.privacy-wrapper {
+    position: relative;
+    width: 100vw;
+    min-height: 100vh;
+    background-image: url("/resources/gifs/gif2.gif");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    flex-direction: column;
+  }
+  
+  .privacy-container {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 800px;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    margin: 40px 0;
+  }
+  
+  .privacy-container h1 {
+    font-size: 42px;
+    color: white;
+    margin-bottom: 30px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .privacy-section {
+    margin-bottom: 30px;
+  }
+  
+  .privacy-section h2 {
+    font-size: 24px;
+    color: white;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+  
+  .privacy-section p {
+    color: white;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+  }
+  
+  .privacy-section ul {
+    color: white;
+    margin-left: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .privacy-section li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+  
+  .privacy-nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+  }
+  
+  .privacy-button {
+    background-color: #212121;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 99px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .privacy-button:hover {
+    background-color: #121212;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .privacy-container {
+      padding: 30px 20px;
+    }
+    
+    .privacy-container h1 {
+      font-size: 32px;
+    }
+    
+    .privacy-section h2 {
+      font-size: 20px;
+    }
+    
+    .privacy-section p, .privacy-section li {
+      font-size: 14px;
+    }
+  }

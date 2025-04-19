@@ -12,6 +12,7 @@
   padding: 20px;
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
+  flex-direction: column;
 }
 
 .registration-container {

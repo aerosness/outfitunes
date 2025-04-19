@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Footer from "../../components/Footer"
 import "./Playlists.css";
 import * as ROUTES from "../../constants/routes";
 
@@ -73,6 +74,7 @@ const Playlists = () => {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

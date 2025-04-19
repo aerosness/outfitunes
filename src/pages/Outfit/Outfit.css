@@ -2,11 +2,11 @@
     min-height: 100vh;
     background-image: url("/resources/gifs/gif2.gif");
     background-size: cover;
+    background-repeat: repeat;
     background-position: center;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 40px 20px;
+    align-items: center;
+    flex-direction: column;
 }
 
 
@@ -15,13 +15,14 @@
     height: 704px;
     background: black;
     border-radius: 22px;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
+    align-self: center;
     padding: 20px 10px;
     gap: 20px;
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    margin-top: 10px;
   }
   
   .genre-title {
@@ -119,4 +120,10 @@ a:hover {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .phone-frame{
+    scale: 0.9;
+  }
 }
