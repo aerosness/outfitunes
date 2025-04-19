@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
+import Footer from "../../components/Footer"
 import "./Registration.css";
 
 const CLIENT_ID = "6742a45a680a410e8e0e0cda6297993c";
@@ -66,6 +67,7 @@ const Registration = () => {
 
         <p className="note">ℹ️ Make sure you're not in incognito</p>
       </div>
+      <Footer />
     </div>
   );
 };

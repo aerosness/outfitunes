@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import axios from "axios";
 import html2canvas from "html2canvas";
+import Footer from "../../components/Footer"
 import genresData from "../../constants/genres_dict.json";
 import "./Outfit.css";
 
@@ -287,10 +288,10 @@ const Outfit = () => {
             <Link to="/playlists">back</Link>
             <button onClick={downloadOutfit}>save as image</button>
           </div>
+          <Footer />
         </div>
       )}
 
-      
     </div>
   );
 };
