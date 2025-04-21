@@ -8,10 +8,8 @@
         "Shoegaze",
         "UK Drill",
         "Breakcore",
-        "Trap",
         "Phonk",
         "Bedroom Pop",
-        "Hyperpop",
         "Pop",
         "Electronic",
         "Hip Hop",
@@ -90,16 +88,6 @@
             "grime",
             "drill"
         ],
-        "Trap": [
-            "trap",
-            "melodic trap",
-            "hard trap",
-            "latin trap",
-            "afro trap",
-            "turkish trap",
-            "phonk trap",
-            "alternative trap"
-        ],
         "Breakcore": [
             "breakcore",
             "raggacore",
@@ -126,15 +114,6 @@
             "alt-z",
             "soft pop",
             "tiktok pop"
-        ],
-        "Hyperpop": [
-            "hyperpop",
-            "glitch pop",
-            "bubblegum bass",
-            "nightcore",
-            "hard hyperpop",
-            "future bass pop",
-            "alt hyperpop"
         ],
         "Pop": [
             "pop",
@@ -941,6 +920,14 @@
             "west coast trap",
             "battle rap",
             "detroit techno",
+            "trap",
+            "melodic trap",
+            "hard trap",
+            "latin trap",
+            "afro trap",
+            "turkish trap",
+            "phonk trap",
+            "alternative trap",
             "antilliaanse rap",
             "apostolic worship",
             "boston hip hop",
