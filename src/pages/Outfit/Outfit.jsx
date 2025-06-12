@@ -282,7 +282,7 @@ const Outfit = () => {
               {outfit.accessories[1] && <img src={outfit.accessories[1]} alt="acc2" />}
             </div>
           </div>
-          <div className="footer-text">outfitunes.vercel.app</div>
+          <div className="footer-text">outfitunes.com</div>
           <div>
             <button onClick={() => window.location.reload()}>reload</button>
             <Link to="/playlists">back</Link>
