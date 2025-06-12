@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/react"
 import * as ROUTES from "./constants/routes";
 import Registration from "./pages/Registration/Registration";
 import Playlists from "./pages/Playlists/Playlists";
