@@ -3,7 +3,7 @@
 > Turn your music taste into fashion statements.  
 > OutfitTunes creates personalized outfit ideas based on your playlists!
 
-**🌐 Live Demo:** [https://outfitunes.vercel.app](https://outfitunes.vercel.app)
+**🌐 Live Demo:** [https://outfitunes.com](https://outfitunes.com)
 
 ---
 
