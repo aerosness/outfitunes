@@ -10,7 +10,7 @@ const Privacy = () => {
         <h1>PRIVACY POLICY</h1>
         
         <div className="privacy-section">
-          <h2>Last Updated: April 19, 2025</h2>
+          <h2>Last Updated: April 23, 2025</h2>
           
           <p>Welcome to Outfitunes. We respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we handle data when you use our application.</p>
         </div>
@@ -21,7 +21,6 @@ const Privacy = () => {
           <ul>
             <li>Your Spotify display name</li>
             <li>Your playlists (names, cover images, and contents)</li>
-            <li>Your currently playing track and playback state</li>
           </ul>
           <p>We only access the data that Spotify provides through their API with the scopes you explicitly authorize. We do not collect or store any passwords.</p>
         </div>
