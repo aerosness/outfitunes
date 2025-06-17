@@ -88,6 +88,8 @@ const downloadOutfit = async () => {
   const canvas = await html2canvas(frame, {
     useCORS: true,
     backgroundColor: null,
+    scale: window.devicePixelRatio || 1,
+    scrollY: -window.scrollY,
   });
 
   const link = document.createElement("a");
@@ -103,6 +105,10 @@ const Outfit = () => {
   const [loading, setLoading] = useState(false);
   const { state } = useLocation();
   const [username, setUsername] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [availableImages, setAvailableImages] = useState({
+    top: [], bottom: [], shoes: [], accessory1: [], accessory2: []
+  });
   const playlistId = state?.playlistId;
 
   useEffect(() => {
@@ -212,7 +218,12 @@ const Outfit = () => {
           top: randomTop ? `/outfit/${formattedGenre}/top/${randomTop}` : null,
           bottom: randomBottom ? `/outfit/${formattedGenre}/bottom/${randomBottom}` : null,
           shoes: randomShoes ? `/outfit/${formattedGenre}/shoes/${randomShoes}` : null,
-          accessories: randomAccessories.map(file => `/outfit/${formattedGenre}/accessories/${file}`),
+          accessory1: randomAccessories[0]
+            ? `/outfit/${formattedGenre}/accessories/${randomAccessories[0]}`
+            : null,
+          accessory2: randomAccessories[1]
+            ? `/outfit/${formattedGenre}/accessories/${randomAccessories[1]}`
+            : null,
         });
       } catch (error) {
         console.error("Error loading outfit:", error);
@@ -242,6 +253,20 @@ const Outfit = () => {
     }
   }, []);
   
+  const handleEdit = async () => {
+    if (!mainGenre) return;
+    const genrePath = mainGenre.toLowerCase().replace(/\s+/g, '');
+    const [top, bottom, shoes, acc] = await Promise.all([
+      findAvailableImages(genrePath, 'top'),
+      findAvailableImages(genrePath, 'bottom'),
+      findAvailableImages(genrePath, 'shoes'),
+      findAvailableImages(genrePath, 'accessories'),
+    ]);
+    setAvailableImages({ top, bottom, shoes, accessories: acc });
+    setIsEditing(true);
+  };
+
+
   return (
     <div className="outfit-page">
 
@@ -278,16 +303,71 @@ const Outfit = () => {
               {outfit.shoes && <img src={outfit.shoes} alt="shoes" />}
             </div>
             <div className="column">
-              {outfit.accessories[0] && <img src={outfit.accessories[0]} alt="acc1" />}
-              {outfit.accessories[1] && <img src={outfit.accessories[1]} alt="acc2" />}
+              {outfit.accessory1 && <img src={outfit.accessory1} alt="acc1" />}
+              {outfit.accessory2 && <img src={outfit.accessory2} alt="acc2" />}
             </div>
           </div>
           <div className="footer-text">outfitunes.com</div>
-          <div>
+          <div style={{width: "410px"}}>
             <button onClick={() => window.location.reload()}>reload</button>
             <Link to="/playlists">back</Link>
-            <button onClick={downloadOutfit}>save as image</button>
+            <button onClick={handleEdit}>edit</button>
+            <button onClick={downloadOutfit}>save</button>
           </div>
+          {isEditing && (
+            <div className="edit-overlay">
+              <div className="edit-header">
+                <h3>Choose a replacement</h3>
+                <button onClick={() => setIsEditing(false)}>✕</button>
+              </div>
+
+              {['top', 'bottom', 'shoes'].map((cat) => (
+                <div key={cat} className="edit-category">
+                  <h4>{cat.charAt(0).toUpperCase() + cat.slice(1)}</h4>
+                  <div className="edit-thumbs">
+                    {availableImages[cat].map((file) => {
+                      const url = `/outfit/${mainGenre.toLowerCase().replace(/\s+/g, '')}/${cat}/${file}`;
+                      const isSelected = outfit[cat] === url;
+                      return (
+                        <img
+                          key={file}
+                          src={url}
+                          alt={file}
+                          className={isSelected ? 'selected' : ''}
+                          onClick={() => {
+                            setOutfit((o) => ({ ...o, [cat]: url }));
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+
+              {['accessory1', 'accessory2'].map((slot, index) => (
+                <div key={slot} className="edit-category">
+                  <h4>{`Accessory ${index + 1}`}</h4>
+                  <div className="edit-thumbs">
+                    {availableImages.accessories.map((file) => {
+                      const url = `/outfit/${mainGenre.toLowerCase().replace(/\s+/g, '')}/accessories/${file}`;
+                      const isSelected = outfit[slot] === url;
+                      return (
+                        <img
+                          key={file}
+                          src={url}
+                          alt={file}
+                          className={isSelected ? 'selected' : ''}
+                          onClick={() => {
+                            setOutfit((o) => ({ ...o, [slot]: url }));
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
           <Footer />
         </div>
       )}
