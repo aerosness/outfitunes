@@ -90,7 +90,7 @@
 .brace { bottom: 110px; right: 120px; width: 70px; transform: rotate(6deg); }
 
 /* Скрытие/перемещение украшений на телефонах */
-@media (max-width: 768px) {
+@media (max-width: 1350px) {
   .hoodie{
     display: none;
   }
