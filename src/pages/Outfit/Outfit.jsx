@@ -13,7 +13,7 @@ const ARTISTS_ENDPOINT = (ids) =>
 
 const { genres_map } = genresData;
 
-// Maximum number of images to check for each category
+// Maximum number of images to check for each category !!NEEDS A REWORK!!
 const MAX_IMAGES_TO_CHECK = 5;
 
 function unifyGenre(spotifyGenre) {
@@ -46,11 +46,11 @@ async function findAvailableImages(genre, category) {
   const availableImages = [];
   
   for (let i = 1; i <= MAX_IMAGES_TO_CHECK; i++) {
-    const imgPath = `/outfit/${genre}/${category}/${i}.png`;
+    const imgPath = `/outfit/${genre}/${category}/${i}.webp`;
     const exists = await checkImageExists(imgPath);
     
     if (exists) {
-      availableImages.push(`${i}.png`);
+      availableImages.push(`${i}.webp`);
     }
   }
   
