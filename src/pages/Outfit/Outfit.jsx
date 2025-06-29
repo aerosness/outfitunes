@@ -110,6 +110,8 @@ const Outfit = () => {
     top: [], bottom: [], shoes: [], accessory1: [], accessory2: []
   });
   const playlistId = state?.playlistId;
+  const [visibleParts, setVisibleParts] = useState([]);
+
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -225,10 +227,21 @@ const Outfit = () => {
             ? `/outfit/${formattedGenre}/accessories/${randomAccessories[1]}`
             : null,
         });
+
+        setVisibleParts([]); // очистить предыдущие
+        const parts = ['top', 'bottom', 'shoes', 'accessory1', 'accessory2'];
+
+        parts.forEach((part, i) => {
+          setTimeout(() => {
+            setVisibleParts((prev) => [...prev, part]);
+          }, i * 200); // 200ms между каждой частью
+        });
       } catch (error) {
         console.error("Error loading outfit:", error);
       }
     };
+
+
     
     loadOutfit();
   }, [mainGenre]);
@@ -298,13 +311,44 @@ const Outfit = () => {
 
           <div className="outfit-layout">
             <div className="column">
-              {outfit.top && <img src={outfit.top} alt="top" />}
-              {outfit.bottom && <img src={outfit.bottom} alt="bottom" />}
-              {outfit.shoes && <img src={outfit.shoes} alt="shoes" />}
+              {outfit.top && (
+                <img
+                  src={outfit.top}
+                  alt="top"
+                  className={visibleParts.includes('top') ? 'fade-in-scale' : 'hidden'}
+                />
+              )}
+              {outfit.bottom && (
+                <img
+                  src={outfit.bottom}
+                  alt="bottom"
+                  className={visibleParts.includes('bottom') ? 'fade-in-scale' : 'hidden'}
+                />
+              )}
+              {outfit.shoes && (
+                <img
+                  src={outfit.shoes}
+                  alt="shoes"
+                  className={visibleParts.includes('shoes') ? 'fade-in-scale' : 'hidden'}
+                />
+              )}
             </div>
+
             <div className="column">
-              {outfit.accessory1 && <img src={outfit.accessory1} alt="acc1" />}
-              {outfit.accessory2 && <img src={outfit.accessory2} alt="acc2" />}
+              {outfit.accessory1 && (
+                <img
+                  src={outfit.accessory1}
+                  alt="acc1"
+                  className={visibleParts.includes('accessory1') ? 'fade-in-scale' : 'hidden'}
+                />
+              )}
+              {outfit.accessory2 && (
+                <img
+                  src={outfit.accessory2}
+                  alt="acc2"
+                  className={visibleParts.includes('accessory2') ? 'fade-in-scale' : 'hidden'}
+                />
+              )}
             </div>
           </div>
           <div className="footer-text">outfitunes.com</div>
