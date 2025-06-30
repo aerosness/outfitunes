@@ -81,22 +81,48 @@ function getRandomItem(array) {
   return array[randIndex];
 }
 
+const waitForReady = () => {
+  return Promise.all([
+    document.fonts ? document.fonts.ready : Promise.resolve(),
+    new Promise(r => setTimeout(r, 50)) 
+  ]);
+};
+
 const downloadOutfit = async () => {
   const frame = document.querySelector(".phone-frame");
   if (!frame) return;
 
+  await waitForReady();
+
+  frame.style.overflow = 'visible';
+  frame.querySelectorAll('.fade-in-scale, .animated').forEach(el => {
+    el.style.animation = 'none';
+    el.style.transform = 'none';
+    el.style.opacity = '1';
+  });
+
+  const { width, height } = frame.getBoundingClientRect();
+
   const canvas = await html2canvas(frame, {
-    useCORS: true,
+    useCORS:        true,
     backgroundColor: null,
-    scale: window.devicePixelRatio || 1,
-    scrollY: -window.scrollY,
+    scale:          1,
+    width,
+    height,
+    scrollX:        -window.scrollX,
+    scrollY:        -window.scrollY,
+    windowWidth:    document.documentElement.clientWidth,
+    windowHeight:   document.documentElement.clientHeight,
   });
 
   const link = document.createElement("a");
   link.download = "spotify-outfit.png";
   link.href = canvas.toDataURL("image/png");
   link.click();
+
+  frame.style.overflow = '';
 };
+
 
 const Outfit = () => {
   const [token, setToken] = useState("");
@@ -111,6 +137,9 @@ const Outfit = () => {
   });
   const playlistId = state?.playlistId;
   const [visibleParts, setVisibleParts] = useState([]);
+  const [sideGif, setSideGif] = useState(null);
+  const [bgImage, setBgImage] = useState(null);
+
 
 
   useEffect(() => {
@@ -216,6 +245,20 @@ const Outfit = () => {
         const randomShoes = getRandomItem(shoesFiles);
         const randomAccessories = getTwoRandomItems(accessoriesFiles);
         
+        const pngBg = `/outfit/${formattedGenre}/other/1.png`;
+        if (await checkImageExists(pngBg)) {
+          setBgImage(pngBg);
+        } else {
+          setBgImage(null);
+        }
+
+        const sidePath = `/outfit/${formattedGenre}/other/1.gif`;
+        if (await checkImageExists(sidePath)) {
+          setSideGif(sidePath);
+        } else {
+          setSideGif(null);
+        }
+
         setOutfit({
           top: randomTop ? `/outfit/${formattedGenre}/top/${randomTop}` : null,
           bottom: randomBottom ? `/outfit/${formattedGenre}/bottom/${randomBottom}` : null,
@@ -305,8 +348,15 @@ const Outfit = () => {
       )}
 
       {mainGenre && outfit && (
-        <div className="phone-frame">
-          <div className="genre-title">{mainGenre}</div>
+        <div
+          className="phone-frame"
+          style={bgImage ? { backgroundImage: `url(${bgImage})` } : {}}
+        >
+          <div className="genre-title">
+            {sideGif && <img src={sideGif} alt="" className="genre-gif side-left" />}
+            <span className="genre-text">{mainGenre}</span>
+            {sideGif && <img src={sideGif} alt="" className="genre-gif side-right" />}
+          </div>
           <p className="username-subtitle">{username}'s spotify outfit</p>
 
           <div className="outfit-layout">
