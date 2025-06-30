@@ -14,6 +14,8 @@
     width: 396px;
     height: 704px;
     background: black;
+    background-size: cover;
+    background-position: center;
     border-radius: 22px;
     display: flex;
     flex-direction: column;
@@ -181,6 +183,30 @@ a:hover {
 .fade-in-scale {
   animation: fadeInScale 0.5s ease-out forwards;
 }
+
+.genre-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.genre-text {
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  font-size: 34px;
+  font-weight: 900;
+  margin: 0 8px;
+}
+
+.genre-gif {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.side-left  { margin-right: 8px; }
+.side-right { margin-left:  8px; }
 
 @keyframes fadeInScale {
   0% {
