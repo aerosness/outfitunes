@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import "./Footer.css"; // Этот файл для футера, но основной CSS в глобальном файле
+import "./Footer.css";
 
 const Footer = () => {
   const location = useLocation();

@@ -63,7 +63,7 @@ const Playlists = () => {
               onClick={() => handlePlaylistClick(playlist.id)}
             >
               <img
-                src={playlist.images?.[0]?.url || "https://via.placeholder.com/150"}
+                src={playlist.images?.[0]?.url}
                 alt={playlist.name}
                 className="playlist-image"
               />

@@ -13,7 +13,7 @@ const ARTISTS_ENDPOINT = (ids) =>
 
 const { genres_map } = genresData;
 
-// Maximum number of images to check for each category !!NEEDS A REWORK!!
+// number of images to check for each category !!NEEDS A REWORK!!
 const MAX_IMAGES_TO_CHECK = 5;
 
 function unifyGenre(spotifyGenre) {
@@ -31,7 +31,6 @@ function unifyGenre(spotifyGenre) {
   return null;
 }
 
-// Check if an image exists
 const checkImageExists = (url) => {
   return new Promise((resolve) => {
     const img = new Image();
@@ -41,7 +40,6 @@ const checkImageExists = (url) => {
   });
 };
 
-// Find all available images in a category
 async function findAvailableImages(genre, category) {
   const availableImages = [];
   
@@ -57,16 +55,14 @@ async function findAvailableImages(genre, category) {
   return availableImages;
 }
 
-// Get two different random items if possible
 function getTwoRandomItems(array) {
   if (array.length === 0) return [];
   if (array.length === 1) return [array[0]];
   
-  // Get first random item
   const index1 = Math.floor(Math.random() * array.length);
   const item1 = array[index1];
   
-  // Remove the first item and get second random item
+  // remove the first item and get second random item
   const remainingItems = array.filter((_, idx) => idx !== index1);
   const index2 = Math.floor(Math.random() * remainingItems.length);
   const item2 = remainingItems[index2];
@@ -74,7 +70,6 @@ function getTwoRandomItems(array) {
   return [item1, item2];
 }
 
-// Get one random item from array
 function getRandomItem(array) {
   if (array.length === 0) return null;
   const randIndex = Math.floor(Math.random() * array.length);
@@ -122,6 +117,7 @@ const downloadOutfit = async () => {
 
   frame.style.overflow = '';
 };
+
 
 
 const Outfit = () => {
@@ -179,7 +175,7 @@ const Outfit = () => {
         }
 
         console.log("Fetching artist genres...");
-        const chunkSize = 50;
+        const chunkSize = 50; // макс 50 за запрос спасибо спотифай
         let allArtists = [];
         for (let i = 0; i < artistIdsArray.length; i += chunkSize) {
           const chunk = artistIdsArray.slice(i, i + chunkSize);
@@ -231,7 +227,6 @@ const Outfit = () => {
     
     const loadOutfit = async () => {
       try {
-        // Find all available images for each category
         const topFiles = await findAvailableImages(formattedGenre, "top");
         const bottomFiles = await findAvailableImages(formattedGenre, "bottom");
         const shoesFiles = await findAvailableImages(formattedGenre, "shoes");
@@ -239,7 +234,6 @@ const Outfit = () => {
         
         console.log("Available files:", { topFiles, bottomFiles, shoesFiles, accessoriesFiles });
         
-        // Select random items for each category
         const randomTop = getRandomItem(topFiles);
         const randomBottom = getRandomItem(bottomFiles);
         const randomShoes = getRandomItem(shoesFiles);
@@ -308,7 +302,7 @@ const Outfit = () => {
         .catch((err) => console.error("Error fetching username:", err));
     }
   }, []);
-  
+
   const handleEdit = async () => {
     if (!mainGenre) return;
     const genrePath = mainGenre.toLowerCase().replace(/\s+/g, '');
@@ -321,7 +315,6 @@ const Outfit = () => {
     setAvailableImages({ top, bottom, shoes, accessories: acc });
     setIsEditing(true);
   };
-
 
   return (
     <div className="outfit-page">

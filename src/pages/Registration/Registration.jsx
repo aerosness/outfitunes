@@ -45,7 +45,6 @@ const Registration = () => {
 
   return (
     <div className="registration-wrapper">
-      {/* Украшения */}
       <img src="/resources/img/register/vest.png" className="deco vest" alt="vest" />
       <img src="/resources/img/register/acics.png" className="deco acics" alt="acics" />
       <img src="/resources/img/register/jeans.png" className="deco jeans" alt="jeans" />
@@ -53,7 +52,6 @@ const Registration = () => {
       <img src="/resources/img/register/shirt.png" className="deco shirt" alt="shirt" />
       <img src="/resources/img/register/brace.png" className="deco brace" alt="brace" />
 
-      {/* Контент */}
       <div className="registration-container">
         <h1>YOUR <br /> SPOTIFY <br /> OUTFIT</h1>
         <p>Find out what your Spotify outfit looks like based on your music taste.</p>
