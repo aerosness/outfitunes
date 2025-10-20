@@ -2,10 +2,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "../../components/Footer";
 import "./Privacy.css";
+import { Helmet } from 'react-helmet-async';
+
+const canonicalUrl = "https://www.outfitunes.com/privacy"
 
 const Privacy = () => {
   return (
     <div className="privacy-wrapper">
+      <Helmet>
+          <link rel="canonical" href={canonicalUrl} />
+      </Helmet>
       <div className="privacy-container">
         <h1>PRIVACY POLICY</h1>
         

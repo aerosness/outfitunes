@@ -12,6 +12,7 @@ const SCOPES = [
   "playlist-read-private",
 ];
 const SCOPES_URL_PARAM = SCOPES.join(SPACE_DELIMITER);
+const canonicalUrl = "https://www.outfitunes.com/"
 
 const getReturnedParamsFromSpotifyAuth = (hash) => {
   const stringAfterHash = hash.substring(1);
@@ -45,6 +46,9 @@ const Registration = () => {
 
   return (
     <div className="registration-wrapper">
+      <Helmet>
+          <link rel="canonical" href={canonicalUrl} />
+      </Helmet>
       <img src="/resources/img/register/vest.png" className="deco vest" alt="vest" />
       <img src="/resources/img/register/acics.png" className="deco acics" alt="acics" />
       <img src="/resources/img/register/jeans.png" className="deco jeans" alt="jeans" />

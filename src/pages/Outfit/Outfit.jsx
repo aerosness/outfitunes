@@ -5,6 +5,7 @@ import html2canvas from "html2canvas";
 import Footer from "../../components/Footer"
 import genresData from "../../constants/genres_dict.json";
 import "./Outfit.css";
+import { Helmet } from 'react-helmet-async';
 
 const PLAYLIST_TRACKS_ENDPOINT = (playlistId) =>
   `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
@@ -15,6 +16,8 @@ const { genres_map } = genresData;
 
 // number of images to check for each category !!NEEDS A REWORK!!
 const MAX_IMAGES_TO_CHECK = 5;
+
+const canonicalUrl = "https://www.outfitunes.com/outfit"
 
 function unifyGenre(spotifyGenre) {
   if (!spotifyGenre) return null;
@@ -318,7 +321,9 @@ const Outfit = () => {
 
   return (
     <div className="outfit-page">
-
+      <Helmet>
+          <link rel="canonical" href={canonicalUrl} />
+      </Helmet>
       {!playlistId && <p>No playlist selected.</p>}
 
       {!loading && !mainGenre && (
