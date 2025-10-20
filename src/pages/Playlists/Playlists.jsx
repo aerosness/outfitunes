@@ -4,7 +4,7 @@ import axios from "axios";
 import Footer from "../../components/Footer"
 import "./Playlists.css";
 import * as ROUTES from "../../constants/routes";
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet';
 
 const PLAYLISTS_ENDPOINT = "https://api.spotify.com/v1/me/playlists";
 

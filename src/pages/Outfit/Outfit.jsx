@@ -5,7 +5,7 @@ import html2canvas from "html2canvas";
 import Footer from "../../components/Footer"
 import genresData from "../../constants/genres_dict.json";
 import "./Outfit.css";
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet';
 
 const PLAYLIST_TRACKS_ENDPOINT = (playlistId) =>
   `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;

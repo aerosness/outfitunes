@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 import Footer from "../../components/Footer"
 import "./Registration.css";
+import { Helmet } from 'react-helmet';
 
 const CLIENT_ID = "6742a45a680a410e8e0e0cda6297993c";
 const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
