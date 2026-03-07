@@ -4,8 +4,11 @@ import axios from "axios";
 import Footer from "../../components/Footer"
 import "./Playlists.css";
 import * as ROUTES from "../../constants/routes";
+import { Helmet } from 'react-helmet';
 
 const PLAYLISTS_ENDPOINT = "https://api.spotify.com/v1/me/playlists";
+
+const canonicalUrl = "https://www.outfitunes.com/playlists"
 
 const Playlists = () => {
   const [token, setToken] = useState("");
@@ -48,6 +51,9 @@ const Playlists = () => {
 
   return (
     <div className="playlists-wrapper">
+      <Helmet>
+          <link rel="canonical" href={canonicalUrl} />
+      </Helmet>
       <div className="playlists-container-inner">
         <h1 className="page-title">Your Playlists</h1>
 
